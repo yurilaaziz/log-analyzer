@@ -1,10 +1,11 @@
 import logging.config
 import os
 
-LOGGER = logging.getLogger(__name__)
-
 from config42 import ConfigManager
+
 from log_analyzer.default_config import DEFAULT_CONFIG
+
+LOGGER = logging.getLogger(__name__)
 
 env_config = ConfigManager(prefix="LOGANALYZER")
 logging.basicConfig(level=logging.DEBUG if env_config.get("debug") else logging.INFO)

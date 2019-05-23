@@ -1,0 +1,62 @@
+alert_manager:
+  class:
+    name: AlertDefault
+    package: log_analyzer.patterns.alert_default
+  clock:
+    time_chunk: 2
+consumer:
+  date_format: '%m/%d/%Y, %H:%M:%S'
+  refresh_duration: 5
+  severity_color:
+    unknown: red
+    5: red
+    4: yellow
+    3: yellow
+    2: white
+    1: white
+  table_fields:
+  - section
+  - hits
+  - bandwidth
+  - success
+  - bad_request
+  - error
+  - GET
+  - POST
+  - PUT
+  - DELETE
+parser:
+  active: true
+  chunk: 1000
+  clock:
+    algorithm: static
+    limit: 30
+    time_chunk: 2
+  input: /var/log/access.log
+persistence:
+  class:
+    name: MemoryPersistence
+    package: log_analyzer.persistence.memory
+  data_slice_duration: 5
+
+debug: 0
+config:
+  file: null
+logging:
+  disable_existing_loggers: false
+  formatters:
+    simple:
+      format: '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+  handlers:
+    file:
+      backupCount: 5
+      class: logging.handlers.RotatingFileHandler
+      filename: /tmp/log-analyzer.log
+      formatter: simple
+      level: DEBUG
+      maxBytes: 10485760
+  root:
+    handlers:
+    - file
+    level: DEBUG
+  version: 1

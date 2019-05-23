@@ -32,6 +32,7 @@ wheels/
 *.manifest
 *.spec
 
+.DS_Store
 # Installer logs
 pip-log.txt
 pip-delete-this-directory.txt
@@ -58,17 +59,6 @@ coverage.xml
 .ini
 .INI
 
-# Django stuff:
-*.log
-local_settings.py
-
-# Flask stuff:
-instance/
-.webassets-cache
-
-# Scrapy stuff:
-.scrapy
-
 # Sphinx documentation
 docs/_build/
 
@@ -81,11 +71,7 @@ target/
 # pyenv
 .python-version
 
-# celery beat schedule file
-celerybeat-schedule
 
-# SageMath parsed files
-*.sage.py
 
 # dotenv
 .env

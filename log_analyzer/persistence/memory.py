@@ -52,7 +52,6 @@ class MemoryPersistence(PersistenceBase):
 
             # compute total traffic summary
 
-
     def get_stats(self):
         with self.lock:
             if not len(self.time_series):

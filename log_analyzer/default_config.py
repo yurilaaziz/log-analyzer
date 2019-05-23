@@ -4,19 +4,9 @@ LOGGING_CONFIG = {
     "formatters": {
         "simple": {
             "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-        },
-        "user": {
-            "format": "%(login)s - %(asctime)s - %(levelname)s - %(message)s"
         }
-
     },
     "handlers": {
-        "console": {
-            "class": "logging.StreamHandler",
-            "level": "DEBUG",
-            "formatter": "simple",
-            "stream": "ext://sys.stdout"
-        },
         'file': {
             'class': 'logging.handlers.RotatingFileHandler',
             'level': 'DEBUG',
@@ -24,15 +14,6 @@ LOGGING_CONFIG = {
             'filename': '/tmp/log-analyzer.log',
             'maxBytes': 10485760,
             'backupCount': 5,
-        }
-    },
-    "loggers": {
-        "Producer": {
-            "level": "DEBUG",
-            "handlers": [
-                "file", "console"
-            ],
-            "propagate": "no"
         }
     },
     "root": {
@@ -47,7 +28,9 @@ LOGGING_CONFIG = {
 DEFAULT_CONFIG = {
     "logging": LOGGING_CONFIG,
     "debug": 0,
-    "active": False,
+    "config": {
+        "file": None
+    },
     "alert_manager": {
         "clock": {
             "time_chunk": 2,
@@ -63,20 +46,20 @@ DEFAULT_CONFIG = {
             "package": "log_analyzer.persistence.memory",
             "name": "MemoryPersistence"
         },
-        "data_slice_duration": 5
+        "data_slice_duration": 2
     },
     "parser": {
         "chunk": 1000,
         "input": "/var/log/access.log",
         "active": True,
         "clock": {
-            "time_chunk": 2,
+            "time_chunk": 1,
             "limit": 30,
             "algorithm": 'static',
         }
     },
     "consumer": {
-        "refresh_duration": 5,
+        "refresh_duration": 10,
         "date_format": "%m/%d/%Y, %H:%M:%S",
         "table_fields": [
             'section',
@@ -90,14 +73,13 @@ DEFAULT_CONFIG = {
             'PUT',
             'DELETE',
         ],
-        "severity_color":
-            {
-                'unknown': "red",
-                5: "red",
-                4: "yellow",
-                3: "yellow",
-                2: "white",
-                1: "white",
-            }
+        "severity_color": {
+            'unknown': "red",
+            5: "red",
+            4: "yellow",
+            3: "yellow",
+            2: "white",
+            1: "white",
+        }
     }
 }
