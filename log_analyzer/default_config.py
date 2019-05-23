@@ -48,7 +48,56 @@ DEFAULT_CONFIG = {
     "logging": LOGGING_CONFIG,
     "debug": 0,
     "active": False,
-    "alert_manager": {},
-    "parser": {},
-    "consumer": {}
+    "alert_manager": {
+        "clock": {
+            "time_chunk": 2,
+        },
+        "class": {
+            "package": "log_analyzer.patterns.alert_default",
+            "name": "AlertDefault"
+        },
+
+    },
+    "persistence": {
+        "class": {
+            "package": "log_analyzer.persistence.memory",
+            "name": "MemoryPersistence"
+        },
+        "data_slice_duration": 5
+    },
+    "parser": {
+        "chunk": 1000,
+        "input": "/var/log/access.log",
+        "active": True,
+        "clock": {
+            "time_chunk": 2,
+            "limit": 30,
+            "algorithm": 'static',
+        }
+    },
+    "consumer": {
+        "refresh_duration": 5,
+        "date_format": "%m/%d/%Y, %H:%M:%S",
+        "table_fields": [
+            'section',
+            'hits',
+            'bandwidth',
+            'success',
+            'bad_request',
+            'error',
+            'GET',
+            'POST',
+            'PUT',
+            'DELETE',
+        ],
+        "severity_color":
+            {
+                'unknown': "red",
+                5: "red",
+                4: "yellow",
+                3: "yellow",
+                2: "white",
+                1: "white",
+            }
+    }
 }

@@ -1,19 +1,18 @@
 import copy
 from datetime import datetime
-from datetime import timedelta
-from multiprocessing import Lock
+from threading import Lock
 
-from .base import Persistence
+from .base import PersistenceBase
 
 
-class MemoryPersistence(Persistence):
+class MemoryPersistence(PersistenceBase):
     def __init__(self):
-        self.time_created = datetime.now()
-        self.data_slice_duration = timedelta(seconds=2)
+        super(MemoryPersistence, self).__init__()
         self.buffer = {}
         self.averages = {}
         self.alerts = []
         self.data_series = {}
+        self.time_series = []
         self.lock = Lock()
         self.parser_stats = {'lines_processed': 0,
                              'idle_time': 0}
@@ -31,6 +30,19 @@ class MemoryPersistence(Persistence):
 
     def update(self, data, lines_processed=None):
         with self.lock:
+            now = datetime.now()
+            if now > (self.time_created + self.data_slice_duration * (len(self.data_series) - 1)):
+                for index, content in self.buffer.items():
+                    for key, value in content.items():
+                        # skip string value from average compute
+                        if isinstance(value, str):
+                            continue
+                        self.averages[key] = self.averages.get(key, 0) + value
+
+                self.data_series[now] = dict(data=self.buffer, averages=self.averages)
+                self.buffer = {}
+                self.averages = {}
+                self.time_series.append(now)
             # compute traffic summary by sections
             for index, content in data.items():
                 if index not in self.buffer:
@@ -39,23 +51,13 @@ class MemoryPersistence(Persistence):
                     self.buffer[index][key] = self.buffer.get(key, 0) + value
 
             # compute total traffic summary
-            for index, content in self.buffer.items():
-                for key, value in content.items():
-                    # skip string value from average compute
-                    if isinstance(value, str):
-                        continue
 
-                    self.averages[key] = self.averages.get(key, 0) + value
-
-            now = datetime.now()
-            if now > (self.time_created + self.data_slice_duration * len(self.data_series)):
-                self.data_series[now] = dict(data=self.buffer, averages=self.averages)
-                self.buffer = {}
-                self.averages = {}
 
     def get_stats(self):
         with self.lock:
-            return [item for key, item in copy.deepcopy(self.buffer).items()]
+            if not len(self.time_series):
+                return {}
+            return copy.deepcopy(self.data_series[self.time_series[-1]])
 
     def get_alerts(self):
         with self.lock:
@@ -67,10 +69,6 @@ class MemoryPersistence(Persistence):
             return [(date, copy.deepcopy(item)) for date, item in self.data_series.items()]
         else:
             return [(date, copy.deepcopy(item)) for date, item in self.data_series.items() if date > from_date]
-
-    def get_averages(self):
-        with self.lock:
-            return copy.deepcopy(self.averages)
 
     def get_parser_stats(self):
         with self.lock:

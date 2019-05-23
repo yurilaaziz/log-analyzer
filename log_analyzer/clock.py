@@ -3,7 +3,7 @@ from logging import getLogger
 
 
 class Clock:
-    def __init__(self, caller, time_chunk=None, algorithm=None, limit=None):
+    def __init__(self, caller,  time_chunk=None, algorithm=None, limit=None):
         self.logger = getLogger(caller.__class__.__name__)
         self.time_chunk = time_chunk if time_chunk else 1
         self.time_delay = self.time_chunk

@@ -1,25 +1,22 @@
 from log_analyzer.calculator import Calculator
 from log_analyzer.clock import Clock
+from log_analyzer.config import config
 from log_analyzer.patterns import LineParser
 from log_analyzer.patterns.access_log_w3 import AccessLogW3
-from log_analyzer.persistence.memory import MemoryPersistence
 from log_analyzer.process import ProcessBase
 from log_analyzer.streamer import Streamer
 
 
 class Parser(ProcessBase):
 
-    def __init__(self, persistence=None, file_path=None, active=False):
+    def __init__(self, persistence):
         super(Parser, self).__init__()
-        self.clock = Clock(self, time_chunk=2, limit=30, algorithm='static')
-        self.streamer = Streamer(file_path)
-        if not persistence:
-            self.persistence = MemoryPersistence()
-        else:
-            self.persistence = persistence
+        self.clock = Clock(self, **config.get("parser.clock"))
+        self.streamer = Streamer(config.get("parser.input"))
+        self.active = config.get("parser.active")
+        self.persistence = persistence
         self.parser = LineParser(AccessLogW3)
         self.calculator = Calculator(AccessLogW3, persistence=self.persistence)
-        self.active = active
         self.logger.debug("Initialize Producer")
 
     def _run(self):

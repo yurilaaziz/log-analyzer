@@ -10,7 +10,7 @@ def w3_access_log_content(access_log_file):
 
 @pytest.fixture
 def access_log_file(cwd):
-    return cwd + '/files/w3_access.log'
+    return cwd + '/files/w3_access.txt'
 
 
 @pytest.fixture
@@ -30,6 +30,6 @@ def pwd(project_working_dir):
 
 @pytest.fixture
 def cwd():
-    from os.path import dirname, realpath
-    cwd = dirname(realpath(__file__))
+    from os.path import dirname, join
+    cwd = join(dirname(__file__))
     return cwd

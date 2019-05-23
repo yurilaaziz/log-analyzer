@@ -2,21 +2,19 @@ from datetime import datetime, timedelta
 from importlib import import_module
 
 from log_analyzer.clock import Clock
-from log_analyzer.patterns.alert_default import Model as AlertDefault
+from log_analyzer.config import config
 from log_analyzer.process import ProcessBase
 
 
 class AlertManager(ProcessBase):
 
-    def __init__(self, persistence, watch_window=None, model=None):
+    def __init__(self, persistence):
         super(AlertManager, self).__init__()
-        if model:
-            self.model = import_module(model).Model
-        else:
-            self.model = AlertDefault
-        self.clock = Clock(self, time_chunk=2)
+        self.model = getattr(import_module(config.get("alert_manager.class.package")),
+                             config.get("alert_manager.class.name"))
+
+        self.clock = Clock(self, **config.get("alert_manager.clock"))
         self.persistence = persistence
-        self.watch_window = watch_window if watch_window else 2 * 60
         self.triggered_rules = []
         self.logger.debug("Initialize AlertManager")
 

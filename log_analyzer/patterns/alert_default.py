@@ -1,7 +1,7 @@
 from log_analyzer.patterns.base import PatternClass
 
 
-class Model(PatternClass):
+class AlertDefault(PatternClass):
     rules = [
         dict(name="high_traffic",
              threshold=10,
