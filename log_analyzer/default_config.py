@@ -31,7 +31,7 @@ DEFAULT_CONFIG = {
     "config": {
         "file": None
     },
-    "alert_manager": {
+    "alertmanager": {
         "clock": {
             "time_chunk": 2,
         },

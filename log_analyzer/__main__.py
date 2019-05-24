@@ -12,13 +12,15 @@ from log_analyzer.processes.parser import Parser
 def main():
     logging.config.dictConfig(config.get("logging"))
     persistence = Persistence()
-    producer = Parser(persistence=persistence)
-    consumer = Consumer(persistence=persistence)
-    alert_manager = AlertManager(persistence=persistence)
-
-    producer.start()
-    alert_manager.start()
-    consumer.start()
+    if config.get("parser"):
+        producer = Parser(persistence=persistence)
+        producer.start()
+    if config.get("consumer"):
+        consumer = Consumer(persistence=persistence)
+        consumer.start()
+    if config.get("alertmanager"):
+        alert_manager = AlertManager(persistence=persistence)
+        alert_manager.start()
 
 
 if __name__ == "__main__":

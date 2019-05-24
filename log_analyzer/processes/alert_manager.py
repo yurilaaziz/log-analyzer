@@ -10,8 +10,8 @@ class AlertManager(ProcessBase):
     def __init__(self, persistence):
         super(AlertManager, self).__init__()
 
-        self.clock = Clock(self, **config.get("alert_manager.clock"))
-        self.rules = config.get("alert_manager.rules")
+        self.clock = Clock(self, **config.get("alertmanager.clock"))
+        self.rules = config.get("alertmanager.rules")
         self.persistence = persistence
         self.triggered_rules = []
         self.logger.debug("Initialize AlertManager")

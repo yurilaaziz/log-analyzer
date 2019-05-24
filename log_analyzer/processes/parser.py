@@ -25,7 +25,7 @@ class Parser(ProcessBase):
             self.logger.debug("Read {}/{} lines".format(len(lines), self.streamer.chunk_size))
 
             data = self.parser.parse(lines)
-            self.persistence.update(self.calculator.compute(data), lines_processed=len(lines))
+            self.persistence.update(self.calculator.compute(data))
             self.persistence.update_parser_stats(lines_processed=len(lines))
 
             # Elastic time delay to consume less compute resource
