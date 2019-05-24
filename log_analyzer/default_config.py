@@ -35,10 +35,18 @@ DEFAULT_CONFIG = {
         "clock": {
             "time_chunk": 2,
         },
-        "class": {
-            "package": "log_analyzer.patterns.alert_default",
-            "name": "AlertDefault"
-        },
+        "rules": [
+            {
+                "name": "high_traffic",
+                "threshold": 10,
+                "key": 'hits',
+                "period": 5,
+                "severity": 5,
+                "message_on_problem": "High traffic generated an alert - hits = {value}/s, triggered at {time}",
+                "message_on_recover": "High traffic recovered at {time}",
+                "recover_min_time": 10
+            }
+        ]
 
     },
     "persistence": {

@@ -63,7 +63,7 @@ Here an example of default configuration in YAML format:
 
 
 ## TO DO 
-- [ ] Rework the Alert Manager process to Delete Alert Class and read Alerting rules from the configuration 
+- [x] Rework the Alert Manager process to Delete Alert Class and read Alerting rules from the configuration 
 - [ ] Rework the __main__ for a better CLI with 'docopt' 
 - [ ] Write a persistence driver to support ElasticSearch/InfluxDB data-store
 - [ ] Support multiple log files/sources

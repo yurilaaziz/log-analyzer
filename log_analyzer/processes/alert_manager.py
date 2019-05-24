@@ -1,5 +1,4 @@
 from datetime import datetime, timedelta
-from importlib import import_module
 
 from log_analyzer.clock import Clock
 from log_analyzer.config import config
@@ -10,10 +9,9 @@ class AlertManager(ProcessBase):
 
     def __init__(self, persistence):
         super(AlertManager, self).__init__()
-        self.model = getattr(import_module(config.get("alert_manager.class.package")),
-                             config.get("alert_manager.class.name"))
 
         self.clock = Clock(self, **config.get("alert_manager.clock"))
+        self.rules = config.get("alert_manager.rules")
         self.persistence = persistence
         self.triggered_rules = []
         self.logger.debug("Initialize AlertManager")
@@ -24,7 +22,7 @@ class AlertManager(ProcessBase):
             self.clock.wait()
             averages.extend(self.persistence.get_data_series(averages[-1][0] if len(averages) else None))
 
-            for rule in self.model.rules:
+            for rule in self.rules or []:
                 value = self.compute_rule(averages, rule)
                 self.logger.debug("Processing  rule {}, value = {}/s".format(rule['name'], value))
 
