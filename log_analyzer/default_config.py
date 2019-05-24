@@ -29,7 +29,8 @@ DEFAULT_CONFIG = {
     "logging": LOGGING_CONFIG,
     "debug": 0,
     "config": {
-        "file": None
+        "file": None,
+        "etcd": None
     },
     "alertmanager": {
         "clock": {

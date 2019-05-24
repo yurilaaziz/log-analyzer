@@ -24,7 +24,7 @@ pip install log-analyzer
 
 ```
 
-## Run the log analyzer
+## Run log analyzer
 ````commandline
 log-analyzer 
 ````
@@ -32,6 +32,16 @@ By default, the log-analyzer reads the log from /var/log/access.log
 
 ![screen shot log-analyzer](artwork/screenshot.png)
 
+
+## Run log analyzer with external configuration
+````commandline
+LOGANALYZER_CONFIG_FILE=sample.config.yml log-analyzer 
+````
+
+## Run log analyzer with another log file
+````commandline
+LOGANALYZER_PARSER_INPUT=/tmp/test.log log-analyzer 
+````
 
 ## Design 
 ![Design log-analyzer](artwork/design.png)
