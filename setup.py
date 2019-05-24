@@ -15,7 +15,7 @@ except IOError:
 setup(
     name="log-analyzer",
     packages=find_packages(),
-    version='0.0.1',
+    version='0.0.2',
     license='GPLv3+',
     description="Log analyzer ",
     long_description=README,
@@ -28,7 +28,7 @@ setup(
     install_requires=required,
     entry_points={"console_scripts": ["log-analyzer = log_analyzer.__main__:main"]},
     classifiers=[
-        'Development Status :: 5 - Production/Stable',
+        'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',
         'Topic :: Software Development :: Build Tools',
         'License :: OSI Approved :: MIT License',

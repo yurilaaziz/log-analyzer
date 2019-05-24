@@ -28,10 +28,11 @@ class MemoryPersistence(PersistenceBase):
             if idle_time is not None:
                 self.parser_stats['idle_time'] = self.parser_stats.get('idle_time', 0) + idle_time
 
-    def update(self, data, lines_processed=None):
+    def update(self, data):
         with self.lock:
             now = datetime.now()
             if now > (self.time_created + self.data_slice_duration * (len(self.data_series) - 1)):
+                # compute total traffic summary
                 for index, content in self.buffer.items():
                     for key, value in content.items():
                         # skip string value from average compute
@@ -49,8 +50,6 @@ class MemoryPersistence(PersistenceBase):
                     self.buffer[index] = dict(section=index)
                 for key, value in content.items():
                     self.buffer[index][key] = self.buffer.get(key, 0) + value
-
-            # compute total traffic summary
 
     def get_stats(self):
         with self.lock:
