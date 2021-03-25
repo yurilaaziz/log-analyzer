@@ -1,5 +1,5 @@
 blessings==1.7
 config42==0.3.1
 prettytable==0.7.2
-pyyaml==5.1
+pyyaml==5.4
 
